@@ -56,5 +56,10 @@ public class Snake {
         head=(head+1)%body.length;
         tail=(head+body.length-length+1)%body.length;
         body[head]=new Point(x,y);
+        if(x > gameP.getWidth() || x < 0 || y > gameP.getHeight() || y < 0) {
+            gameP.setStoped(true);
+            System.out.println("触碰边界");
+
+        }
     }
 }

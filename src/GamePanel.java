@@ -14,8 +14,15 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     public static final int WEST = 3;
     private Snake sk;
     private Food bk;
+    private boolean isPaused = false;
+    private boolean isStoped = false;
     Image im;
     Graphics g;
+
+    public void setStoped(boolean stoped) {
+        isStoped = stoped;
+    }
+
     ImageIcon ima = new ImageIcon("/Users/wonder/Desktop/123.png");
 
     public GamePanel(){
@@ -66,9 +73,8 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
         g.drawImage(im,0,0,null);
     }
 
-    boolean isPaused = false;
     public void run(){
-        while(true){
+        while(!isStoped){
             try{
                 Thread.sleep(100);
             }catch (InterruptedException e){
@@ -76,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
             }
             im = new BufferedImage(this.getWidth(),this.getHeight(),
                     BufferedImage.TYPE_4BYTE_ABGR);
-            if(isPaused == false){
+            if(isPaused == false) {
                 gameUpdate();
             }
             gameRender(im);
@@ -95,16 +101,20 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
             isPaused = !isPaused;
         switch (keycode){
             case KeyEvent.VK_DOWN:
-                direction = SOUTH;
+                if(direction!=NORTH)
+                    direction = SOUTH;
                 break;
             case KeyEvent.VK_UP:
-                direction = NORTH;
+                if(direction!=SOUTH)
+                    direction = NORTH;
                 break;
             case KeyEvent.VK_RIGHT:
-                direction = EAST;
+                if(direction!=WEST)
+                    direction = EAST;
                 break;
             case KeyEvent.VK_LEFT:
-                direction = WEST;
+                if(direction!=EAST)
+                    direction = WEST;
                 break;
         }
     }
