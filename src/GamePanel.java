@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
         isStoped = stoped;
     }
 
-    ImageIcon ima = new ImageIcon("/Users/wonder/Desktop/123.png");
+    ImageIcon ima = new ImageIcon("res/123.png");
 
     public GamePanel(){
         JFrame f = new JFrame("Snake.");
@@ -124,6 +124,10 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     }
     public int getDirection(){
         return direction;
+    }
+    public void startThread(GamePanel g){
+        Thread thread = new Thread(g);
+        thread.start();
     }
     public static void main(String[] args){
         GamePanel g = new GamePanel();
