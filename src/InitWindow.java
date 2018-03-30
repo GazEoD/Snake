@@ -1,18 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class InitWindow extends JPanel{
+import static java.lang.Thread.sleep;
 
+public class InitWindow extends JPanel implements ActionListener,Runnable{
+
+    private JFrame frame;
     private JButton bt_start;
     private JButton bt_option;
     private JButton bt_exit;
+    private int Choose_Flag = -1;
 
-    private JLabel bg;
 
     public InitWindow() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        JFrame frame = new JFrame("InitWindow");
+        frame = new JFrame("InitWindow.");
         frame.setLocation(screenSize.width/2 - 200,screenSize.height/2 - 150);
         frame.setSize(350,400);
         frame.setVisible(true);
@@ -27,6 +32,7 @@ public class InitWindow extends JPanel{
 //        bt_start.setBorder(null);                 按钮透明
 //        bt_start.setContentAreaFilled(false);
 
+        bt_start.addActionListener(this);
 
         setLayout(null);
         setSize(frame.getSize());
@@ -41,6 +47,7 @@ public class InitWindow extends JPanel{
 
         this.setVisible(true);
         frame.setContentPane(this);
+
     }
 
     @Override
@@ -51,9 +58,37 @@ public class InitWindow extends JPanel{
         g.drawImage(image,0,0,icon.getIconWidth()-100,icon.getIconHeight()+120,icon.getImageObserver());
     }
 
-    public static void main(String[] args){
-        InitWindow window = new InitWindow();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == bt_start){
+            System.out.print("Start");
+            Choose_Flag = 1;
+            return;
+        }
+        if(e.getSource() == bt_option){
+            Choose_Flag = 2;
+        }
+        if(e.getSource() == bt_exit){
+            Choose_Flag = 3;
+        }
 
     }
+    @Override
+    public void run() {
+        while(true){
+            try {
+                sleep(100);
+                if(Choose_Flag != -1) {
+                    frame.setVisible(false);
+                    return;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    public int getChoose_Flag() {
+        return Choose_Flag;
+    }
 }

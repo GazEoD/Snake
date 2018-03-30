@@ -26,18 +26,19 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     ImageIcon ima = new ImageIcon("res/123.png");
 
     public GamePanel(){
-        JFrame f = new JFrame("Snake.");
-        f.setLocation(600,100);
-        f.setSize(500,300);
-        f.add(this);
-        f.setDefaultCloseOperation(3);
+
+        JFrame frame = new JFrame("Snack.");
+        frame.setLocation(600,100);
+        frame.setSize(500,300);
+        frame.add(this);
+        frame.setDefaultCloseOperation(3);
 
         x=50;
         y=50;
         dx=10;
         dy=10;
         addKeyListener(this);
-        f.setVisible(true);
+        frame.setVisible(true);
 
         sk = new Snake(this);
         bk = new Food(this,sk);
@@ -125,13 +126,5 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     public int getDirection(){
         return direction;
     }
-    public void startThread(GamePanel g){
-        Thread thread = new Thread(g);
-        thread.start();
-    }
-    public static void main(String[] args){
-        GamePanel g = new GamePanel();
-        Thread thread1 = new Thread(g);
-        thread1.start();
-    }
+
 }
