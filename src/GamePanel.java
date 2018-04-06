@@ -1,3 +1,5 @@
+import com.sun.tools.internal.xjc.addon.sync.SynchronizedMethodAddOn;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,6 +16,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     public static final int WEST = 3;
     private Snake sk;
     private Food bk;
+    private JFrame frame;
     private boolean isPaused = false;
     private boolean isStoped = false;
     Image im;
@@ -25,9 +28,10 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
 
     ImageIcon ima = new ImageIcon("res/123.png");
 
-    public GamePanel(){
-
-        JFrame frame = new JFrame("Snack.");
+    public GamePanel() {
+    }
+    public void draw(){
+        frame = new JFrame("Snack.");
         frame.setLocation(600,100);
         frame.setSize(500,300);
         frame.add(this);
@@ -43,11 +47,14 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
         sk = new Snake(this);
         bk = new Food(this,sk);
         this.requestFocus();
+
+        Thread thread = new Thread(this);
+        thread.start();
     }
-    public void gameUpdate(){
+    public synchronized void gameUpdate(){
         sk.update();
         bk.update(this);
-
+        System.out.println("direction: " + direction);
         switch (direction){
             case SOUTH:
                 y=y+dy;
@@ -75,6 +82,9 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     }
 
     public void run(){
+        Thread t1 = Thread.currentThread();
+        System.out.println("GamePanel: " + t1.getName());
+
         while(!isStoped){
             try{
                 Thread.sleep(100);
@@ -86,6 +96,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
             if(isPaused == false) {
                 gameUpdate();
             }
+            System.out.println(getDirection());
             gameRender(im);
             gamePaint(im);
         }
@@ -97,6 +108,8 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     }
 
     public void keyPressed(KeyEvent e){
+        Thread thread = Thread.currentThread();
+        System.out.println("Key Thread: " + thread.getName());
         int keycode = e.getKeyCode();
         if(keycode == KeyEvent.VK_SPACE)
             isPaused = !isPaused;
@@ -104,18 +117,24 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
             case KeyEvent.VK_DOWN:
                 if(direction!=NORTH)
                     direction = SOUTH;
+                System.out.println("KEY: DOWN");
                 break;
             case KeyEvent.VK_UP:
                 if(direction!=SOUTH)
                     direction = NORTH;
+                System.out.println("KEY: SOUTH");
+
                 break;
             case KeyEvent.VK_RIGHT:
                 if(direction!=WEST)
                     direction = EAST;
+                System.out.println("KEY: EAST");
+
                 break;
             case KeyEvent.VK_LEFT:
                 if(direction!=EAST)
                     direction = WEST;
+                System.out.println("KEY: WEST");
                 break;
         }
     }
@@ -125,6 +144,10 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     }
     public int getDirection(){
         return direction;
+    }
+    public void hidePanel(){
+        isStoped=true;
+        frame.setVisible(false);
     }
 
 }

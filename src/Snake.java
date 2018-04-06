@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 
 public class Snake {
@@ -17,7 +18,7 @@ public class Snake {
         head = -1;
         tail = -1;
         length = 1;
-        speed = 10;
+        speed = Preferences.preferences.getSpeed().getValue();
         x = 50;
         y = 50;
         r = 10;
@@ -58,6 +59,7 @@ public class Snake {
         body[head]=new Point(x,y);
         if(x > gameP.getWidth() || x < 0 || y > gameP.getHeight() || y < 0) {
             gameP.setStoped(true);
+            JOptionPane.showMessageDialog(Controler.getGamePanel(),"You are Die!");
             System.out.println("触碰边界");
 
         }

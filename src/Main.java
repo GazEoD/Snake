@@ -1,17 +1,17 @@
-import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args){
+
         InitWindow initWindow = new InitWindow();
+        OptionPanel optionPanel = new OptionPanel();
+        GamePanel gamePanel = new GamePanel();
 
-        Thread t1 = new Thread(initWindow);
-        t1.run();
-        System.out.println(initWindow.getChoose_Flag());
+        Preferences.newInstance();
+        System.out.println(Parameter.EASY.getValue());
+        Preferences.initParameter(Parameter.EASY,0);
 
-
-        GamePanel panel = new GamePanel();
-        Thread thread = new Thread(panel);
-        thread.start();
+        Controler.Init(initWindow,optionPanel,gamePanel);
+        Controler.showInitWindow();
     }
 }

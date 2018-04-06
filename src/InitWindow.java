@@ -3,18 +3,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static java.lang.Thread.sleep;
-
-public class InitWindow extends JPanel implements ActionListener,Runnable{
+public class InitWindow extends JPanel implements ActionListener{
 
     private JFrame frame;
     private JButton bt_start;
     private JButton bt_option;
     private JButton bt_exit;
-    private int Choose_Flag = -1;
 
 
     public InitWindow() {
+
+    }
+    public void draw(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         frame = new JFrame("InitWindow.");
@@ -33,6 +33,8 @@ public class InitWindow extends JPanel implements ActionListener,Runnable{
 //        bt_start.setContentAreaFilled(false);
 
         bt_start.addActionListener(this);
+        bt_option.addActionListener(this);
+        bt_exit.addActionListener(this);
 
         setLayout(null);
         setSize(frame.getSize());
@@ -47,7 +49,6 @@ public class InitWindow extends JPanel implements ActionListener,Runnable{
 
         this.setVisible(true);
         frame.setContentPane(this);
-
     }
 
     @Override
@@ -60,35 +61,20 @@ public class InitWindow extends JPanel implements ActionListener,Runnable{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == bt_start){
-            System.out.print("Start");
-            Choose_Flag = 1;
-            return;
-        }
-        if(e.getSource() == bt_option){
-            Choose_Flag = 2;
-        }
-        if(e.getSource() == bt_exit){
-            Choose_Flag = 3;
-        }
+        String bt_name = e.getActionCommand();
 
-    }
-    @Override
-    public void run() {
-        while(true){
-            try {
-                sleep(100);
-                if(Choose_Flag != -1) {
-                    frame.setVisible(false);
-                    return;
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if(bt_name.equals("Start")){
+            Controler.closeInitWindow();
+            Controler.showGamePanel();
+        }else if(bt_name.equals("Option")){
+            Controler.closeInitWindow();
+            Controler.showOptionPanel();
+        } else if(bt_name.equals("Exit")){
+            Controler.exit();
         }
     }
-
-    public int getChoose_Flag() {
-        return Choose_Flag;
+    public void hideWindow(){
+        frame.removeAll();
+        frame.setVisible(false);
     }
 }
